@@ -1,0 +1,36 @@
+---
+
+- name: Install Libreoffice and language pack
+  become: yes
+  pacman:
+    state: latest
+    update_cache: yes
+    name:
+      - libreoffice-fresh
+      - libreoffice-fresh-de
+  tags:
+    - office:libreoffice
+
+- name: Install language aids for Libreoffice
+  become: yes
+  pacman:
+    state: latest
+    update_cache: yes
+    name:
+      - hunspell
+      - hunspell-de
+      - hyphen
+      - hyphen-de
+      - libmythes
+      - mythes-de
+  tags:
+    - office:libreoffice:aids
+
+- name: Force GTK3 look and feel for Libreoffice
+  become: yes
+  lineinfile:
+    dest: /etc/profile.d/libreoffice-fresh.sh
+    regexp: "^#export SAL_USE_VCLPLUGIN=gtk3$"
+    line: "export SAL_USE_VCLPLUGIN=gtk3"
+  tags:
+    - office:libreoffice:config
